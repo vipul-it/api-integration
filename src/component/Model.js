@@ -18,14 +18,19 @@ const Model = ({ openModel, closeModel }) => {
     setData({ ...data, [e.target.name]: e.target.value });
     // console.log(data);
   };
-  const handleSubmit =  (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-     axios.post("http://localhost:5000/api/products/", data).then((response) => {console.log(response.data)})      
-    //  catch((error) => {      
-    //     // Handle error
-    //     console.error("Error fetching data:", error);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/products/",
+        data
+      );
+      console.log(response.data);
+    } catch  (error) {      
+        // Handle error
+        console.error("Error fetching data:", error);
       
-    // })
+    }
   };
   return (
     <div>

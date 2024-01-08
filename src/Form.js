@@ -88,6 +88,7 @@ const Form = () => {
                       {item.description}
                     </td>
                     <td className="p-3  text-end text-sm ">{item.price}</td>
+                    <td className="p-3  text-end text-sm ">Update</td>
                     <td className="p-3  text-end text-sm "><button onClick={()=>handleDelete(item._id)}>Delete</button></td>
                   </tr>
                 ))}
