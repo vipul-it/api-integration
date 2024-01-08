@@ -64,9 +64,9 @@ const Form = () => {
             </div>
           </div>
         </div>
-        <div className="flex  mt-10">
-          <div className="overflow-x-auto ">
-            <table className="my-0 text-dark border-neutral-200">
+        <div className="  mt-10">
+          <div className="flex justify-center mx-auto   w-full overflow-x-auto  ">
+            <table className="my-0 text-dark border-neutral-600 w-full">
               <thead className="">
                 <tr className="font-bold text-sm text-secondary-dark border-b">
                   <th className="">PRODUCT</th>
@@ -79,17 +79,17 @@ const Form = () => {
               <tbody>
                 {data.map((item, index) => (
                   <tr key={index} className="border-b font-semibold">
-                    <td className="p-3  text-end text-sm">
+                    <td className="p-3 text-sm">
                       {item.productName}
                     </td>
-                    <td className="p-3  text-end text-sm">{item.category}</td>
-                    <td className="p-3  text-end text-sm ">{item.brand}</td>
-                    <td className="p-3  text-end text-sm ">
+                    <td className="p-3 text-sm">{item.category}</td>
+                    <td className="p-3 text-sm ">{item.brand}</td>
+                    <td className="p-3 text-sm ">
                       {item.description}
                     </td>
-                    <td className="p-3  text-end text-sm ">{item.price}</td>
-                    <td className="p-3  text-end text-sm ">Update</td>
-                    <td className="p-3  text-end text-sm "><button onClick={()=>handleDelete(item._id)}>Delete</button></td>
+                    <td className="p-3 text-sm ">{item.price}</td>
+                    <td className="p-3 text-sm ">Update</td>
+                    <td className="p-3 text-sm "><button onClick={()=>handleDelete(item._id)}>Delete</button></td>
                   </tr>
                 ))}
               </tbody>
