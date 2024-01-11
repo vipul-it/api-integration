@@ -2,43 +2,65 @@ import React, { useState, useEffect } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import Model from "./component/Model";
 import axios from "axios";
+import Update from "./component/Update";
 const Form = () => {
+  const [data, setData] = useState([]);
   const [openModal, setOpenModel] = useState(false);
+  const [openUpdatedModel, setUpdateModel] = useState(false);
+  const[selectedId, setSelectedid] = useState(null);
+  const fetchData = async () => {
+    try {
+      // Make a GET request
+      const response = await axios.get(
+        "https://backend-crud-tau.vercel.app/api/products/"
+      );
+      console.log("Received data from GET request:", response.data);
+
+      // Update state with the fetched data
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
+  const openUpdate = (id) => {
+    setUpdateModel(true);
+    setSelectedid(id)
+  };
+  const closeUpdate = () => {
+    setUpdateModel(false);
+    setSelectedid(null);
+  };
   const handleOpenModel = () => {
     setOpenModel(true);
   };
   const handleCloseModel = () => {
     setOpenModel(false);
+    fetchData();
   };
-  const [data, setData] = useState([]);
+  
+
   useEffect(() => {
-    // Axios GET request
-    axios
-      .get("http://localhost:5000/api/products/")
-      .then((response) => {
-        // Handle successful response
-        setData(response.data);
-        // console.log(response.data);
-      })
-      .catch((error) => {
-        // Handle error
-        console.error("Error fetching data:", error);
-      });
+    // Call the fetchData function
+    fetchData();
   }, []);
 
   const handleDelete = async (id) => {
-   try{
-    const response = await axios.delete(`http://localhost:5000/api/products/${id}`)    
-      console.log(response.data);   
-   
-  }catch(error){
-    console.log(error);
-  }
-}
+    try {
+      const response = await axios.delete(
+        `https://backend-crud-tau.vercel.app/api/products/${id}`
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      fetchData();
+    }
+  };
   return (
     <div className="">
-      <div className="md:m-4 shadow-md px-10 py-5 min-h-max z-30 top-0">
-        <Model openModel={openModal} closeModel={handleCloseModel} />
+      <Model openModel={openModal} closeModel={handleCloseModel} />
+      <div className=" md:m-4 shadow-md px-10 py-5  overflow-auto z-30 top-0">
         <div className="flex justify-between bg-white">
           <div className="relative px-4 py-2 rounded-lg w-1/2 border-gray-400 border hover:border-blue-500">
             <div className=" absolute top-3">
@@ -46,7 +68,7 @@ const Form = () => {
               {/* <label className="top-0">Search</label> */}
             </div>
             <input
-              className="w-full pl-4  outline-none ring-0 "
+              className="w-full pl-4 outline-none ring-0 "
               type=" search"
               placeholder="Search"
             />
@@ -79,17 +101,21 @@ const Form = () => {
               <tbody>
                 {data.map((item, index) => (
                   <tr key={index} className="border-b font-semibold">
-                    <td className="p-3 text-sm">
-                      {item.productName}
-                    </td>
+                    <td className="p-3 text-sm">{item.productName}</td>
                     <td className="p-3 text-sm">{item.category}</td>
                     <td className="p-3 text-sm ">{item.brand}</td>
-                    <td className="p-3 text-sm ">
-                      {item.description}
-                    </td>
+                    <td className="p-3 text-sm ">{item.description}</td>
                     <td className="p-3 text-sm ">{item.price}</td>
-                    <td className="p-3 text-sm ">Update</td>
-                    <td className="p-3 text-sm "><button onClick={()=>handleDelete(item._id)}>Delete</button></td>
+                    <td className="p-3 text-sm ">
+                    <button onClick={()=>openUpdate(item._id)} >
+                    Update
+                      </button> 
+                    </td>
+                    <td className="p-3 text-sm ">
+                      <button onClick={() => handleDelete(item._id)}>
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -97,6 +123,7 @@ const Form = () => {
           </div>
         </div>
       </div>
+      {openUpdatedModel && ( <Update  closeUpdate={closeUpdate}  selectedId={selectedId} />)}
     </div>
   );
 };
