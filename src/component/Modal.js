@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useState } from "react";
-
 const Modal = ({ openModal, closeModal }) => {
   const handleCloseModal = () => {
     closeModal();
@@ -19,26 +18,40 @@ const Modal = ({ openModal, closeModal }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const newError = {};
-    // if (data.productName === "" || !data.product.trim()) {
-    //   newError.productName = " requered name";
-    // } else {
-    //   newError.productName = "";
-    // }
-    // setError(newError);
+    const newError = {};
+    if (data.productName === "" || !data.productName.trim()) {
+      newError.productName = "Product name is required";
+    }else{
+      newError.productName = "";
+    }
+    if (data.brand === "") {
+      newError.brand = "Brand name required";
+    }
+    if (data.category === "") {
+      newError.category = "Category is required";
+    }
+    if (isNaN(data.price)) {
+      newError.price = "Enter Only Number ";
+    } else if (data.price === "") {
+      newError.price = "Category is required";
+    }
+    if (Object.keys(newError).length === 0) {
+      alert("Form Submited Succesfully");
+      handleCloseModal();
+    }
+    setError(newError);
+
     try {
       const response = await axios.post(
         "https://backend-crud-tau.vercel.app/api/products/",
         data
       );
       console.log(response.data);
-      
     } catch (error) {
       // Handle error
       console.error("Error fetching data:", error);
-    } finally {
-      handleCloseModal();
     }
+    
   };
   return (
     <div>
@@ -47,7 +60,7 @@ const Modal = ({ openModal, closeModal }) => {
           openModal ? "block" : "hidden"
         }`}
       >
-        <div className="max-w-lg   shadow-lg rounded-lg bg-white mx-auto p-4 lg:p-10 ">
+        <form className="max-w-lg   shadow-lg rounded-lg bg-white mx-auto p-4 lg:p-10 ">
           <div className="flex justify-between items-baseline py-4">
             <h1 className="text-xl font-bold">Add Product</h1>
             <button
@@ -57,7 +70,7 @@ const Modal = ({ openModal, closeModal }) => {
               X
             </button>
           </div>
-          <div className="md:flex gap-4 ">
+          <form className="md:flex gap-4 " >
             <div className="text-start w-full">
               <label className="">Product Name</label>
               <input
@@ -65,9 +78,11 @@ const Modal = ({ openModal, closeModal }) => {
                 type=" text"
                 name="productName"
                 className="p-2 w-full border bg-slate-100 border-gray-200 hover:border-blue-500 rounded-lg"
-                placeholder=""
+                placeholder="" 
               />
-              <div>{error.productName}</div>
+              <div className="text-red-600 font-semibold">
+                {error.productName}
+              </div>
             </div>
             <div className="text-start w-full">
               <label className="">Brand</label>
@@ -78,8 +93,9 @@ const Modal = ({ openModal, closeModal }) => {
                 className="p-2 w-full bg-slate-100 border border-gray-200 hover:border-blue-500 rounded-lg"
                 placeholder=""
               />
+              <div className="text-red-600 font-semibold">{error.brand}</div>
             </div>
-          </div>
+          </form>
           <div className="md:flex gap-4 ">
             <div className="text-start w-full">
               <label className="">Category</label>
@@ -90,6 +106,7 @@ const Modal = ({ openModal, closeModal }) => {
                 className="p-2 w-full bg-slate-100 border border-gray-200 hover:border-blue-500 rounded-lg"
                 placeholder=""
               />
+              <div className="text-red-600 font-semibold">{error.category}</div>
             </div>
             <div className="text-start w-full">
               <label className="">Price</label>
@@ -100,6 +117,7 @@ const Modal = ({ openModal, closeModal }) => {
                 className="p-2 w-full bg-slate-100 border border-gray-200 hover:border-blue-500 rounded-lg"
                 placeholder=""
               />
+              <div className="text-red-600 font-semibold">{error.price}</div>
             </div>
           </div>
           <div className="text-start w-full py-2">
@@ -113,12 +131,13 @@ const Modal = ({ openModal, closeModal }) => {
               placeholder=""
             />
           </div>
-          <div onClick={handleSubmit} className="bg-blue-800 flex justify-center mx-auto items-center m-4 rounded-lg w-28 p-2">
-            <button className="text-white " >
-              Submit
-            </button>
+          <div
+            onClick={handleSubmit}
+            className="bg-blue-800 flex justify-center mx-auto items-center m-4 rounded-lg w-28 p-2"
+          >
+            <button className="text-white ">Submit</button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
