@@ -8,6 +8,8 @@ const Form = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openUpdatedModal, setUpdateModal] = useState(false);
   const[selectedId, setSelectedid] = useState(null);
+  //For Search data 
+  const[serachItem, setSearchItem] = useState("");
   const fetchData = async () => {
     try {
       // Make a GET request
@@ -35,8 +37,7 @@ const Form = () => {
   const handleCloseModal =() => {
     setOpenModal(false);
     fetchData();
-  };
-  
+  };  
 
   useEffect(() => {
     // Call the fetchData function
@@ -55,6 +56,13 @@ const Form = () => {
       fetchData();
     }
   };
+  const handleSearch =(e)=>{
+    setSearchItem(e.target.value)
+  }
+  // filter item 
+  const filterData = data.filter((item)=>
+    item.productName.toLowerCase().includes(serachItem.toLowerCase())
+  )
   return (
     <div className="">
       <Modal openModal={openModal} closeModal={handleCloseModal} />
@@ -67,7 +75,7 @@ const Form = () => {
             </div>
             <input
               className="w-full pl-4 outline-none ring-0 "
-              type=" search"
+              type=" search" value={serachItem} onChange={handleSearch}
               placeholder="Search"
             />
           </div>
@@ -97,7 +105,7 @@ const Form = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item, index) => (
+                {filterData.map((item, index) => (
                   <tr key={index} className="border-b font-semibold">
                     <td className="p-3 text-sm">{item.productName}</td>
                     <td className="p-3 text-sm">{item.category}</td>
