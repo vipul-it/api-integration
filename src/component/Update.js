@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 const Update = ({ selectedId, closeUpdate }) => {
-  const handleCloseModel = () => {
+  const handleCloseModal = () => {
     closeUpdate();
   };
   const [data, setData] = useState({
@@ -13,8 +13,7 @@ const Update = ({ selectedId, closeUpdate }) => {
   });
   const handleInputChange = (e, field) => {
     setData({ ...data, [field]: e.target.value });
-  };
- 
+  }; 
   const fetchExitData = async () => {
    try{
     const response = await axios.get(
@@ -27,14 +26,14 @@ const Update = ({ selectedId, closeUpdate }) => {
    }
   };
   const fetchData = async () => {
+    // e.preventDefault();
     try {
       const response = await axios.put(
         `https://backend-crud-tau.vercel.app/api/products/${selectedId}`,
         data
       );      
       console.log("Data updated successfully:", response.data);
-      handleCloseModel();
-     
+      handleCloseModal();     
     } catch (error) {
       console.error("Error updating data:", error);
     }
@@ -53,7 +52,7 @@ const Update = ({ selectedId, closeUpdate }) => {
             <h1 className="text-xl font-bold">Update Product</h1>
             <button
               className="hover:bg-theme1light text-black/50 border border-black/20 font-poppins py-1 px-3  rounded-lg "
-              onClick={handleCloseModel}
+              onClick={handleCloseModal}
             >
               X
             </button>
@@ -127,5 +126,4 @@ const Update = ({ selectedId, closeUpdate }) => {
     </div>
   );
 };
-
 export default Update;

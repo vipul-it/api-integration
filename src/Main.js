@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { IoSearchOutline } from "react-icons/io5";
-import Model from "./component/Model";
+import Modal from "./component/Modal";
 import axios from "axios";
 import Update from "./component/Update";
 const Form = () => {
   const [data, setData] = useState([]);
-  const [openModal, setOpenModel] = useState(false);
-  const [openUpdatedModel, setUpdateModel] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [openUpdatedModal, setUpdateModal] = useState(false);
   const[selectedId, setSelectedid] = useState(null);
   const fetchData = async () => {
     try {
@@ -15,27 +15,25 @@ const Form = () => {
         "https://backend-crud-tau.vercel.app/api/products/"
       );
       console.log("Received data from GET request:", response.data);
-
       // Update state with the fetched data
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
-  
+  };  
   const openUpdate = (id) => {
-    setUpdateModel(true);
+    setUpdateModal(true);
     setSelectedid(id)
   };
   const closeUpdate = () => {
-    setUpdateModel(false);
+    setUpdateModal(false);
     setSelectedid(null);
   };
-  const handleOpenModel = () => {
-    setOpenModel(true);
+  const handleOpenModal =() => {
+    setOpenModal(true);
   };
-  const handleCloseModel = () => {
-    setOpenModel(false);
+  const handleCloseModal =() => {
+    setOpenModal(false);
     fetchData();
   };
   
@@ -59,7 +57,7 @@ const Form = () => {
   };
   return (
     <div className="">
-      <Model openModel={openModal} closeModel={handleCloseModel} />
+      <Modal openModal={openModal} closeModal={handleCloseModal} />
       <div className=" md:m-4 shadow-md px-10 py-5  overflow-auto z-30 top-0">
         <div className="flex justify-between bg-white">
           <div className="relative px-4 py-2 rounded-lg w-1/2 border-gray-400 border hover:border-blue-500">
@@ -75,7 +73,7 @@ const Form = () => {
           </div>
           <div className="w-1/3 flex justify-end gap-4 items-center ">
             <div className="bg-blue-500 p-2 rounded-lg">
-              <button className="text-white text-sm" onClick={handleOpenModel}>
+              <button className="text-white text-sm" onClick={handleOpenModal}>
                 Add Section
               </button>
             </div>
@@ -123,7 +121,7 @@ const Form = () => {
           </div>
         </div>
       </div>
-      {openUpdatedModel && ( <Update  closeUpdate={closeUpdate}  selectedId={selectedId} />)}
+      {openUpdatedModal && ( <Update  closeUpdate={closeUpdate}  selectedId={selectedId} />)}
     </div>
   );
 };
