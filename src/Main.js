@@ -45,6 +45,17 @@ const Form = () => {
   }, []);
 
   const handleDelete = async (id) => {
+    // Display a confirmation dialog
+    const userConfirmed = window.confirm("Are you sure you want to delete?");
+
+    // Check if the user confirmed
+    if (userConfirmed) {
+      // Perform the deletion logic here
+      console.log("Deletion logic executed");
+    } else {
+      // User canceled the deletion
+      console.log("Deletion canceled");
+    }
     try {
       const response = await axios.delete(
         `https://backend-crud-tau.vercel.app/api/products/${id}`
