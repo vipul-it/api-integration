@@ -50,6 +50,8 @@ const Modal = ({ openModal, closeModal }) => {
     } catch (error) {
       // Handle error
       console.error("Error fetching data:", error);
+    } finally{
+      handleCloseModal();
     }
     
   };

@@ -7,9 +7,9 @@ const Form = () => {
   const [data, setData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openUpdatedModal, setUpdateModal] = useState(false);
-  const[selectedId, setSelectedid] = useState(null);
-  //For Search data 
-  const[serachItem, setSearchItem] = useState("");
+  const [selectedId, setSelectedid] = useState(null);
+  //For Search data
+  const [serachItem, setSearchItem] = useState("");
   const fetchData = async () => {
     try {
       // Make a GET request
@@ -22,22 +22,22 @@ const Form = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };  
+  };
   const openUpdate = (id) => {
     setUpdateModal(true);
-    setSelectedid(id)
+    setSelectedid(id);
   };
   const closeUpdate = () => {
     setUpdateModal(false);
     setSelectedid(null);
+    fetchData();
   };
-  const handleOpenModal =() => {
+  const handleOpenModal = () => {
     setOpenModal(true);
   };
-  const handleCloseModal =() => {
+  const handleCloseModal = () => {
     setOpenModal(false);
-    fetchData();
-  };  
+  };
 
   useEffect(() => {
     // Call the fetchData function
@@ -56,68 +56,64 @@ const Form = () => {
       fetchData();
     }
   };
-  const handleSearch =(e)=>{
-    setSearchItem(e.target.value)
-  }
-  // filter item 
-  const filterData = data.filter((item)=>
+  const handleSearch = (e) => {
+    setSearchItem(e.target.value);
+  };
+  // filter item
+  const filterData = data.filter((item) =>
     item.productName.toLowerCase().includes(serachItem.toLowerCase())
-  )
+  );
   return (
     <div className="">
       <Modal openModal={openModal} closeModal={handleCloseModal} />
-      <div className=" md:m-4 shadow-md px-10 py-5  overflow-auto z-30 top-0">
+      <div className=" md:m-4  px-10 py-3  overflow-auto z-30 top-0">
         <div className="flex justify-between bg-white">
-          <div className="relative px-4 py-2 rounded-lg w-1/2 border-gray-400 border hover:border-blue-500">
-            <div className=" absolute top-3">
+          <div className="relative px-5 py-3 text-start rounded-lg w-1/2 border-gray-400 border hover:border-blue-500">
+            <div className="flex items-center">
               <IoSearchOutline />
-              {/* <label className="top-0">Search</label> */}
+              <input
+                className="w-full pl-4 outline-none ring-0 "
+                type=" search"
+                value={serachItem}
+                onChange={handleSearch}
+                placeholder="Search"
+              />
             </div>
-            <input
-              className="w-full pl-4 outline-none ring-0 "
-              type=" search" value={serachItem} onChange={handleSearch}
-              placeholder="Search"
-            />
           </div>
-          <div className="w-1/3 flex justify-end gap-4 items-center ">
+          <div className="flex justify-end gap-4 items-center ">
             <div className="bg-blue-500 p-2 rounded-lg">
-              <button className="text-white text-sm" onClick={handleOpenModal}>
-                Add Section
+              <button className="text-white " onClick={handleOpenModal}>
+                Add Product
               </button>
-            </div>
-            <div className="">
-              <p className="px-4 py-1  border-gray-400 border-2 hover:border-blue-500">
-                Filter
-              </p>
             </div>
           </div>
         </div>
-        <div className="  mt-10">
-          <div className="flex justify-center mx-auto   w-full overflow-x-auto  ">
-            <table className="my-0 text-dark border-neutral-600 w-full">
+        <div className=" mt-10">
+          <div className=" mx-auto   w-full overflow-x-auto  ">
+            <table className="my-0 text-dark border-neutral-600  w-full">
               <thead className="">
-                <tr className="font-bold text-sm text-secondary-dark border-b">
-                  <th className="">PRODUCT</th>
-                  <th className="">CATEGORY</th>
-                  <th className="">BRAND</th>
-                  <th className="">DESCRIPTION</th>
-                  <th className="">PRICE</th>
+                <tr className="  font-bold  text-secondary-dark border-b">
+                  <th className="py-2 text-start">PRODUCT</th>
+                  <th className="py-2 text-start">CATEGORY</th>
+                  <th className="py-2 text-start">BRAND</th>
+                  <th className="py-2 text-start">DESCRIPTION</th>
+                  <th className="py-2 text-start">PRICE</th>
                 </tr>
               </thead>
               <tbody>
                 {filterData.map((item, index) => (
-                  <tr key={index} className="border-b font-semibold">
-                    <td className="p-3 text-sm">{item.productName}</td>
-                    <td className="p-3 text-sm">{item.category}</td>
-                    <td className="p-3 text-sm ">{item.brand}</td>
-                    <td className="p-3 text-sm ">{item.description}</td>
-                    <td className="p-3 text-sm ">{item.price}</td>
-                    <td className="p-3 text-sm ">
-                    <button onClick={()=>openUpdate(item._id)} >
-                    Update
-                      </button> 
+                  <tr key={index} className="border-b  ">
+                    <td className="py-2 text-start">{item.productName}</td>
+                    <td className="py-2 text-start">{item.category}</td>
+                    <td className="py-2 text-start">{item.brand}</td>
+                    <td className="py-2 text-start">{item.description}</td>
+                    <td className="py-2 text-start">{item.price}</td>
+                    <td className="py-2 text-start text-blue-500">
+                      <button onClick={() => openUpdate(item._id)}>
+                        Update
+                      </button>
                     </td>
-                    <td className="p-3 text-sm ">
+                    <td className="py-2 text-start  text-red-500">
                       <button onClick={() => handleDelete(item._id)}>
                         Delete
                       </button>
@@ -129,7 +125,9 @@ const Form = () => {
           </div>
         </div>
       </div>
-      {openUpdatedModal && ( <Update  closeUpdate={closeUpdate}  selectedId={selectedId} />)}
+      {openUpdatedModal && (
+        <Update closeUpdate={closeUpdate} selectedId={selectedId} />
+      )}
     </div>
   );
 };

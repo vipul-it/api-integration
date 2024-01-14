@@ -1,9 +1,11 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+
 const Update = ({ selectedId, closeUpdate }) => {
   const handleCloseModal = () => {
     closeUpdate();
   };
+
   const [data, setData] = useState({
     productName: "",
     brand: "",
@@ -11,39 +13,55 @@ const Update = ({ selectedId, closeUpdate }) => {
     description: "",
     price: "",
   });
+
   const handleInputChange = (e, field) => {
     setData({ ...data, [field]: e.target.value });
-  }; 
-  const fetchExitData = async () => {
-   try{
-    const response = await axios.get(
-      `https://backend-crud-tau.vercel.app/api/products/${(selectedId)}`
-    );
-    setData(response.data)
-    console.log(response.data);
-   }catch(error){
-    console.log(error);
-   }
   };
+
+  const fetchExitData = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `https://backend-crud-tau.vercel.app/api/products/${selectedId}`
+      );
+
+      setData((prevData) => ({
+        ...prevData,
+        ...response.data,
+      }));
+
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [selectedId]);
+
   const fetchData = async () => {
-    // e.preventDefault();
     try {
       const response = await axios.put(
         `https://backend-crud-tau.vercel.app/api/products/${selectedId}`,
         data
-      );      
+      );
       console.log("Data updated successfully:", response.data);
-      handleCloseModal();     
+      handleCloseModal();
     } catch (error) {
       console.error("Error updating data:", error);
     }
   };
+
   useEffect(() => {
     fetchExitData();
-  }, [selectedId]);
+  }, [selectedId, fetchExitData]);
+
   const handleSubmit = () => {
     fetchData();
   };
+
+  // useEffect(() => {
+  //   const handleSubmit = () => {
+  //     fetchData();
+  //   };
+  // }, []);
+
   return (
     <div>
       <div className="fixed inset-0 z-50 overflow-auto bg-black/50">
@@ -126,4 +144,5 @@ const Update = ({ selectedId, closeUpdate }) => {
     </div>
   );
 };
+
 export default Update;
